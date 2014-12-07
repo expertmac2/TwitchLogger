@@ -23,7 +23,7 @@ public class TwitchLogEntry {
 		sender = event.getUser().getNick();
 		message = event.getMessage();
 		month = now.get(Calendar.MONTH) + 1;
-		day = now.get(Calendar.DAY_OF_WEEK);
+		day = now.get(Calendar.DAY_OF_MONTH);
 		year = now.get(Calendar.YEAR);
 		hours = now.get(Calendar.HOUR_OF_DAY);
 		minutes = now.get(Calendar.MINUTE);
