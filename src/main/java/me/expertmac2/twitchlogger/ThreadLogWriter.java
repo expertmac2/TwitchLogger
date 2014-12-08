@@ -17,8 +17,9 @@ public class ThreadLogWriter extends Thread {
 	private final PrintWriter jsonWriter;
 	private final SimpleDateFormat filenameFormat = new SimpleDateFormat("dd-M-yyyy_hh-mm-ss");
 	private boolean keepWriting = true;
+	private boolean isOkayToExit = false;
 
-	private final ConcurrentLinkedQueue<MessageEvent> logQueue = new ConcurrentLinkedQueue<MessageEvent>();
+	private final ConcurrentLinkedQueue<TwitchLogEntry> logQueue = new ConcurrentLinkedQueue<TwitchLogEntry>();
 	private final Gson gson = new Gson();
 	
 	public ThreadLogWriter() throws FileNotFoundException {
@@ -33,29 +34,59 @@ public class ThreadLogWriter extends Thread {
 		jsonFile.getParentFile().mkdirs();
 		jsonWriter = new PrintWriter(jsonFile);
 		
+		System.out.println("Logging to: " + file.getAbsolutePath());
+		
 		jsonWriter.println("[");
 	}
 
 	@Override
 	public void run() {
 		while (keepWriting) {
-			MessageEvent event = logQueue.poll();
-			if (event == null)
-				continue;
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
-			TwitchLogEntry entry = new TwitchLogEntry(event);
-
-			writer.println(entry.toString());
-			jsonWriter.println(gson.toJson(entry) + ",");
-			System.out.println(entry.toString());
+			TwitchLogEntry entry;
+			while ((entry = logQueue.poll()) != null) { // clear out logQueue
+				writeNormalText(entry.toString());
+				jsonWriter.println(gson.toJson(entry) + ",");
+			}
 			
 			writer.flush();
-			jsonWriter.flush();
+			jsonWriter.flush();		
 		}
+		
+		TwitchLogEntry entry;
+		while ((entry = logQueue.poll()) != null) { // clear out logQueue before terminating
+			writeNormalText(entry.toString());
+			jsonWriter.println(gson.toJson(entry) + ((logQueue.isEmpty()) ? "" : ","));
+		}
+		
+		jsonWriter.println("]");
+		writer.flush();
+		jsonWriter.flush();
+		
+		isOkayToExit = true;
+	}
+	
+	private void writeNormalText(String message) {
+		writer.println(message);
+		System.out.println(message);
+		LoggerGUI.instance.addToPane(message);
 	}
 
-	public void addToQueue(MessageEvent event) {
-		logQueue.add(event);
+	public void addToQueue(TwitchLogEntry entry) {
+		logQueue.add(entry);
+	}
+	
+	public void setKeepWriting(boolean bool) {
+		keepWriting = bool;
+	}
+	
+	public boolean isOkayToExit() {
+		return isOkayToExit;
 	}
 
 }
