@@ -7,7 +7,7 @@ Feel free to fork TwitchLogger and do what you wish with it.
 
 ## Usage
 
-`java -jar [the jar location] [Twitch username] [your OAuth token] [the directory to output logs]`
+`java -jar [the jar location] [Twitch username] [your OAuth token] [channel] [the directory to output logs]`
 
 ## How do I get my OAuth token?
 
