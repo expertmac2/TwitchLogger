@@ -1,24 +1,22 @@
 package me.expertmac2.twitchlogger;
 
-import java.io.FileNotFoundException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.ConnectEvent;
-import org.pircbotx.hooks.events.MessageEvent;
+import org.jibble.pircbot.PircBot;
 
-public class MessageHandler extends ListenerAdapter {
+public class MessageHandler extends PircBot {
 
 	private final Timer timer = new Timer();
 	private int countdown;
 
-	public MessageHandler() {
+	public MessageHandler(String username) {
+		this.setName(username);
 		countdown = TwitchLogger.instance.getTimeout();
 	}
 
 	@Override
-	public void onConnect(ConnectEvent event) {
+	public void onConnect() {
 		if (TwitchLogger.instance.isTimeoutEnabled()) {
 			timer.scheduleAtFixedRate(new TimerTask() {
 
@@ -35,9 +33,9 @@ public class MessageHandler extends ListenerAdapter {
 	}
 
 	@Override
-	public void onMessage(MessageEvent event) throws Exception {
+	public void onMessage(String channel, String sender, String login, String hostname, String message) {
 		countdown = TwitchLogger.instance.getTimeout();
-		TwitchLogger.instance.logWriter.addToQueue(new TwitchLogEntry(event));
+		TwitchLogger.instance.logWriter.addToQueue(new TwitchLogEntry(sender, message));
 	}
 
 }

@@ -11,6 +11,8 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -63,14 +65,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.pircbotx</groupId>
-			<artifactId>pircbotx</artifactId>
-			<version>2.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>pircbot</groupId>
+			<artifactId>pircbot</artifactId>
+			<version>1.5.0</version>
 		</dependency>
 	</dependencies>
 </project>

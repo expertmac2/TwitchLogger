@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.pircbotx.hooks.events.MessageEvent;
-
 public class TwitchLogEntry {
 
 	public final String sender;
@@ -17,20 +15,6 @@ public class TwitchLogEntry {
 	public final int minutes;
 	public final int seconds;
 	
-	public TwitchLogEntry(MessageEvent event) {
-		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		now.setTimeInMillis(event.getTimestamp());
-		
-		sender = event.getUser().getNick();
-		message = event.getMessage();
-		month = now.get(Calendar.MONTH) + 1;
-		day = now.get(Calendar.DAY_OF_MONTH);
-		year = now.get(Calendar.YEAR);
-		hours = now.get(Calendar.HOUR_OF_DAY);
-		minutes = now.get(Calendar.MINUTE);
-		seconds = now.get(Calendar.SECOND);
-	}
-	
 	public TwitchLogEntry(String s, String m, Calendar now) {
 		sender = s;
 		message = m;
@@ -40,6 +24,10 @@ public class TwitchLogEntry {
 		hours = now.get(Calendar.HOUR_OF_DAY);
 		minutes = now.get(Calendar.MINUTE);
 		seconds = now.get(Calendar.SECOND);
+	}
+	
+	public TwitchLogEntry(String s, String m) {
+		this(s, m, Calendar.getInstance(TimeZone.getTimeZone("GMT")));
 	}
 
 	@Override

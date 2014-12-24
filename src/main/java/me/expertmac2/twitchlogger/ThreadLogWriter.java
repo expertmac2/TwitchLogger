@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.pircbotx.hooks.events.MessageEvent;
-
 import com.google.gson.Gson;
 
 public class ThreadLogWriter extends Thread {
@@ -68,8 +66,6 @@ public class ThreadLogWriter extends Thread {
 	private void writeNormalText(String message) {
 		writer.println(message);
 		System.out.println(message);
-		if (TwitchLogger.instance.isGuiEnabled())
-			LoggerGUI.instance.addToPane(message);
 	}
 
 	public void addToQueue(TwitchLogEntry entry) {
