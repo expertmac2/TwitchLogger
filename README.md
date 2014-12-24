@@ -3,6 +3,8 @@ TwitchLogger
 
 A program that logs a Twitch IRC channel. It will output in a human-friendly .txt file and a .json file for easy use with other projects. The dates and times will be in GMT.
 
+This branch of TwitchLogger is meant as a "bare minimum" version. It does not use PircBotX, instead it uses PircBot, which is what PircBotX is based on. It also does not include the Swing GUI. This version can even be run on a jailbroken iOS device with the Classpath package from the Cydia/Telesphoreo repository!
+
 Feel free to fork TwitchLogger and do what you wish with it.
 
 ## Usage
