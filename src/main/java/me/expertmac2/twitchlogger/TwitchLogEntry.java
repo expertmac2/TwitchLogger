@@ -19,9 +19,21 @@ public class TwitchLogEntry {
 	
 	public TwitchLogEntry(MessageEvent event) {
 		Calendar now = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		now.setTimeInMillis(event.getTimestamp());
 		
 		sender = event.getUser().getNick();
 		message = event.getMessage();
+		month = now.get(Calendar.MONTH) + 1;
+		day = now.get(Calendar.DAY_OF_MONTH);
+		year = now.get(Calendar.YEAR);
+		hours = now.get(Calendar.HOUR_OF_DAY);
+		minutes = now.get(Calendar.MINUTE);
+		seconds = now.get(Calendar.SECOND);
+	}
+	
+	public TwitchLogEntry(String s, String m, Calendar now) {
+		sender = s;
+		message = m;
 		month = now.get(Calendar.MONTH) + 1;
 		day = now.get(Calendar.DAY_OF_MONTH);
 		year = now.get(Calendar.YEAR);
@@ -33,6 +45,10 @@ public class TwitchLogEntry {
 	@Override
 	public String toString() {
 		return "[" + dateString() + " " + timeString() + "] " + sender + ": " + message;
+	}
+	
+	public String toDateAndTimeString() {
+		return "(" + dateString() + " " + timeString() + ")";
 	}
 	
 	private String timeString() {

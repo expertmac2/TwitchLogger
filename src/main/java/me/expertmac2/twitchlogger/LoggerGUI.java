@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,6 +23,8 @@ public class LoggerGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextArea textArea;
 	private JScrollPane scrollPane;
+	private JLabel lblWaiting;
+	private JButton btnStopLogger;
 	
 	/**
 	 * Create the frame.
@@ -34,44 +37,51 @@ public class LoggerGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		final JLabel lblWaiting = new JLabel("Cleaning up, please wait...");
-		lblWaiting.setBounds(158, 243, 274, 14);
+		lblWaiting = new JLabel("Cleaning up, please wait...");
+		lblWaiting.setBounds(283, 243, 149, 14);
 		lblWaiting.setVisible(false);
 		contentPane.add(lblWaiting);
 		
-		final JButton btnStopLogger = new JButton("Stop Logger");
-		btnStopLogger.setBounds(10, 239, 138, 23);
+		btnStopLogger = new JButton("Stop Logger");
+		btnStopLogger.setBounds(10, 239, 129, 23);
 		btnStopLogger.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				btnStopLogger.setEnabled(false);
 				lblWaiting.setVisible(true);
-				TwitchLogger.instance.stopBot();
-				TwitchLogger.instance.logWriter.setKeepWriting(false);
-				
-				Timer timer = new Timer();
-				timer.scheduleAtFixedRate(new TimerTask() {
-
-					@Override
-					public void run() {
-						if (TwitchLogger.instance.logWriter.isOkayToExit() && !TwitchLogger.instance.isBotConnected()) {
-							System.exit(0);
-						}
-					}
-					
-				}, 0L, 1000L);
+				TwitchLogger.instance.stopLogging();
 			}
 			
 		});
 		contentPane.add(btnStopLogger);
 		
+		JButton button = new JButton("Clear TextArea");
+		button.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				clearTextArea();
+			}
+			
+		});
+		button.setBounds(149, 239, 124, 23);
+		contentPane.add(button);
+		
 		textArea = new JTextArea();
-		//textArea.setBounds(10, 11, 422, 210);
 		textArea.setEditable(false);
 
 		scrollPane = new JScrollPane(textArea);
 		scrollPane.setBounds(10, 11, 422, 210);
 		contentPane.add(scrollPane);
+		
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				clearTextArea();
+			}
+			
+		}, 0L, TwitchLogger.instance.getClearInterval());
 		
 		instance = this;
 	}
@@ -80,4 +90,9 @@ public class LoggerGUI extends JFrame {
 		textArea.setText(textArea.getText() + str + "\n");
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
+	
+	public void clearTextArea() {
+		textArea.setText("Cleared TextArea.\n");
+	}
+	
 }

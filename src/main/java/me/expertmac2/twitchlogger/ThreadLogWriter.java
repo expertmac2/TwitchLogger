@@ -58,12 +58,6 @@ public class ThreadLogWriter extends Thread {
 			jsonWriter.flush();		
 		}
 		
-		TwitchLogEntry entry;
-		while ((entry = logQueue.poll()) != null) { // clear out logQueue before terminating
-			writeNormalText(entry.toString());
-			jsonWriter.println(gson.toJson(entry) + ((logQueue.isEmpty()) ? "" : ","));
-		}
-		
 		jsonWriter.println("]");
 		writer.flush();
 		jsonWriter.flush();
@@ -74,7 +68,8 @@ public class ThreadLogWriter extends Thread {
 	private void writeNormalText(String message) {
 		writer.println(message);
 		System.out.println(message);
-		LoggerGUI.instance.addToPane(message);
+		if (TwitchLogger.instance.isGuiEnabled())
+			LoggerGUI.instance.addToPane(message);
 	}
 
 	public void addToQueue(TwitchLogEntry entry) {
