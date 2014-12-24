@@ -7,7 +7,14 @@ Feel free to fork TwitchLogger and do what you wish with it.
 
 ## Usage
 
-`java -jar [the jar location] [Twitch username] [your OAuth token] [channel] [the directory to output logs]`
+```
+java -jar <the jar> <username> <OAuth token> <channel> <log output directory> [any other args]
+
+Optional Args: 
+--timeout       : Disconnects the bot after a certain number of seconds passes
+                  without anybody talking. (e.g. --timeout=20 disconnects the 
+                  bot if no message is recieved for 20 seconds.)
+```
 
 ## How do I get my OAuth token?
 
